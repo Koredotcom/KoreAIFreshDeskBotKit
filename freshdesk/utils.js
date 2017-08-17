@@ -1,0 +1,148 @@
+/**
+ * Created by vijay on 26/5/17.
+ */
+
+var request         = require('request');
+var debug           = require('debug')('freshdesk-api');
+
+function FreshdeskError(message, data, res) {
+    this.name = 'FreshdeskError'
+    this.message = message || 'Error in Freshdesk\'s client API'
+    this.stack = (new Error()).stack
+
+    this.data = data
+
+    this.status = res.statusCode
+    this.apiTarget = res.request.method+" "+ res.request.uri.href
+}
+FreshdeskError.prototype = Object.create(Error.prototype)
+FreshdeskError.prototype.constructor = FreshdeskError
+
+
+function createResponseHandler (cb) {
+    return function (error, response, body) {
+        if (error) {
+            debug('Error on request: [%s], req path [%s] raw body: %o',
+                error,
+                response ? response.request.path : undefined,
+                response ? response.request.body : undefined
+            )
+            return cb(error)
+        }
+
+        var data = null
+        var extra = {
+            pageIsLast: true
+        }
+
+        debug('Got API response, status [%s]', response.statusCode)
+
+        if (response
+            && response.headers
+            && 'string' === typeof response.headers.link
+        ) {
+            debug('Detected http-header LINK, page is not last', response.headers.link)
+            extra.pageIsLast = false
+            // TODO: reconsider this property
+            extra._headersLink = response.headers.link
+        }
+
+        switch(response.statusCode) {
+            // SUCCESS
+            // https://httpstatuses.com/200 OK
+            // https://httpstatuses.com/201 Created
+            case 200:
+            case 201:
+                try {
+                    data = JSON.parse(body)
+                } catch (err) {
+                    if (err instanceof SyntaxError) {
+                        debug('Valid HTTP status [%s], but not a JSON resp. Path:[%s] raw body: %o',
+                            response.statusCode,
+                            response.request.path,
+                            response.request.body
+                        )
+                        return cb(new FreshdeskError('Not a JSON response from API', body, response))
+                    }
+
+                    // unknown error
+                    return cb(err)
+                }
+                return cb(null, data, extra)
+
+            // SUCCESS for DELETE operations
+            // https://httpstatuses.com/204 No Content
+            case 204:
+                return cb(null, null, extra)
+
+            // https://httpstatuses.com/404 Not found
+            case 404:
+                debug('path:[%s] raw body: %o',
+                    response.request.path,
+                    response.request.body
+                )
+
+                // In most casses 404 means, that there is no such entity on requested
+                // Freshdesk domain. For example, you are trying to update non-existent
+                // contact
+                // But, it also could be a result of wrong URL (?!?!?)
+                //
+                // In most cases the body is EMPTY, so we will just warn about wrong entity
+                return cb(new FreshdeskError('The requested entity was not found', data, response))
+
+            // https://httpstatuses.com/409 Conflict  - NOT UNIQUE, where unique required
+            case 409:
+            default:
+                debug('path:[%s] raw body: %o',
+                    response.request.path,
+                    response.request.body
+                )
+
+                try {
+                    data = JSON.parse(body)
+                } catch (err) {
+                    if (err instanceof SyntaxError) {
+                        // data is not a JSON, so lets return it "AS IS"
+                        debug('Unexpected HTTP status [%s], and not a JSON resp. Path:[%s] raw body: %o',
+                            response.statusCode,
+                            response.request.path,
+                            response.request.body
+                        )
+                        return cb(new FreshdeskError('Not a JSON response from API', body, response))
+                    }
+
+                    // unknown error
+                    return cb(err)
+                }
+
+                return cb(new FreshdeskError(data.description, data, response))
+        }
+    }
+}
+
+// TODO: try to make less params here
+function makeRequest(method, auth, url, qs, data, cb) {		// eslint-disable-line max-params
+    var options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': auth
+        },
+        url: url, // for debugging set to: "https://httpbin.org/get"
+        qs: qs
+    }
+
+    if(data) {
+        options.body = JSON.stringify(data)
+    }
+
+    request(options, createResponseHandler(cb))
+}
+
+function urlGenerator(base_url,path){
+    return base_url+path;
+}
+
+module.exports.makeRequest = makeRequest
+module.exports.FreshdeskError = FreshdeskError
+module.exports.urlGenerator = urlGenerator
