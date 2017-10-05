@@ -19,8 +19,8 @@ var userDataMap = {};
 var _userMsgData = {};
 server.start();
 
-var wsURL = "8a5aa69d.ngrok.io/freshdeskws";
-var userStatusURL = "73c5dacd.ngrok.io" + config.app.apiPrefix + '/userstatus/';
+var wsURL = config.app.botKitDomain + "/freshdeskws";
+var userStatusURL = config.app.botKitDomain + config.app.apiPrefix + '/userstatus/';
 
 var allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -111,7 +111,7 @@ sdk.registerBot({
     botName: botName,
     on_user_message: function (requestId, data, callback) {
         console.log("EVENT => on_user_message" , data);
-        console.log("\n\n\n\n\n\n _------------------------------------------------");
+        console.log("\n\n\n\n\n\n ------------------------------------------------");
         if(data.context.session.BotUserSession.locationInfo) {
             data.metaInfo = {
                 nlMeta : {
@@ -161,7 +161,7 @@ sdk.registerBot({
     },
     on_bot_message: function (requestId, data, callback) {
         console.log("EVENT => on_bot_message", data);
-        console.log("\n\n\n\n\n\n _------------------------------------------------");
+        console.log("\n\n\n\n\n\n ------------------------------------------------");
         var visitorId = _.get(data, 'channel.from');
         if (_userMsgData[visitorId]) {
             _userMsgData[visitorId].messages.push("<div style='width: 100%;display: table;'><div style='background-color: #F1F0F0; border-radius: 5px; box-shadow: 0 0 6px #B2B2B2;float: left; margin: 5px 45px 5px 20px;  display: inline-block; padding: 10px 18px; position: relative; vertical-align: top;'><b>" + botName + " : </b>" + data.message + "</div></div>");

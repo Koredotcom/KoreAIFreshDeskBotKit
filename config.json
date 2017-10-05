@@ -3,11 +3,12 @@
     "port": 8042
   },
   "app": {
-    "apiPrefix": "/freshdesk"
+    "apiPrefix": "/freshdesk",
+    "botKitDomain": "fbintegration.kore.com" // TODO CHANGE THIS
   },
   "credentials": {
-    "apikey": "VtiwDKb9e5VM1U7CqCGRFIWqimWi6RHGuvhCs9Tgjk0=",
-    "appId": "cs-765dc7cc-a280-5a17-9e7e-1b7af5e96c95"
+    "apikey": "6svNiAdWkFb+kbcPJTrvxbEwAuni+hMvacX64Ox0WCY=",
+    "appId": "cs-ee3da031-e11b-58f6-bcff-9d65fad8e037"
   },
   "redis": {
     "options": {
@@ -20,12 +21,12 @@
     "mockServicesHost": "http://localhost:8004"
   },
   "freshDesk" :{
-    "url" : "https://koreai.freshdesk.com",
-    "apikey" : "kKCzMJjQafq5iR8LOKs",
-    "email" : "sunitha.subramani@kore.com"
+    "url" : "https://koreai.freshdesk.com", // TODO CHANGE THIS
+    "apikey" : "place your api key", // TODO CHANGE THIS
+    "email" : "place your freshdesk email" // TODO CHANGE THIS
   },
   "botInfo" : {
-    "botId" : "st-b2b4c5e9-1047-5218-b024-6fbf5e5869bb",
-    "botName" : "Asana Sample Bot"
+    "botId" : "st-ccf7b6fc-8c44-5d88-9cb7-e6dc7f52b705",
+    "botName" : "Freshdesk Demo Bot"
   }
 }
