@@ -4,7 +4,8 @@
   },
   "app": {
     "apiPrefix": "/freshdesk",
-    "botKitDomain": "41b3fec8.ngrok.io [CHANGE THIS]"
+    "botKitDomain": "41b3fec8.ngrok.io [CHANGE THIS: Domain for Botkit : Port 8042]",
+    "botKitWSDomain": "4ae4479a.ngrok.io [CHANGE THIS: Domain for web socket : Port 8041]"
   },
   "credentials": {
     "apikey": "6svNiAdWkFb+kbcPJTrvxbEwAuni+hMvacX64Ox0WCY=",

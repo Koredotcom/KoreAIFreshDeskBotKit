@@ -19,7 +19,7 @@ var userDataMap = {};
 var _userMsgData = {};
 server.start();
 
-var wsURL = config.app.botKitDomain + "/freshdeskws";
+var wsURL = config.app.botKitWSDomain + "/freshdeskws";
 var userStatusURL = config.app.botKitDomain + config.app.apiPrefix + '/userstatus/';
 
 var allowCrossDomain = function (req, res, next) {
@@ -162,6 +162,9 @@ sdk.registerBot({
     on_bot_message: function (requestId, data, callback) {
         console.log("EVENT => on_bot_message", data);
         console.log("------------------------------------------------");
+        if(data.message.length === 0) {
+            return;
+        }
         var visitorId = _.get(data, 'channel.from');
         if (_userMsgData[visitorId]) {
             _userMsgData[visitorId].messages.push("<div style='width: 100%;display: table;'><div style='background-color: #F1F0F0; border-radius: 5px; box-shadow: 0 0 6px #B2B2B2;float: left; margin: 5px 45px 5px 20px;  display: inline-block; padding: 10px 18px; position: relative; vertical-align: top;'><b>" + botName + " : </b>" + data.message + "</div></div>");
