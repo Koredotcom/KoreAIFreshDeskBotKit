@@ -4,7 +4,7 @@
   },
   "app": {
     "apiPrefix": "/freshdesk",
-    "botKitDomain": "fbintegration.kore.com" // TODO CHANGE THIS
+    "botKitDomain": "41b3fec8.ngrok.io [CHANGE THIS]"
   },
   "credentials": {
     "apikey": "6svNiAdWkFb+kbcPJTrvxbEwAuni+hMvacX64Ox0WCY=",
@@ -21,9 +21,9 @@
     "mockServicesHost": "http://localhost:8004"
   },
   "freshDesk" :{
-    "url" : "https://koreai.freshdesk.com", // TODO CHANGE THIS
-    "apikey" : "place your api key", // TODO CHANGE THIS
-    "email" : "place your freshdesk email" // TODO CHANGE THIS
+    "url" : "https://koreai.freshdesk.com [CHANGE THIS]",
+    "apikey" : "0kDcHmKmKVKEa2N8bND [CHANGE THIS]",
+    "email" : "nagarjun.chodapaneedi@kore.com [CHANGE THIS]"
   },
   "botInfo" : {
     "botId" : "st-ccf7b6fc-8c44-5d88-9cb7-e6dc7f52b705",

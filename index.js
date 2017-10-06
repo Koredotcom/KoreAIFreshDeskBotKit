@@ -111,7 +111,7 @@ sdk.registerBot({
     botName: botName,
     on_user_message: function (requestId, data, callback) {
         console.log("EVENT => on_user_message" , data);
-        console.log("\n\n\n\n\n\n ------------------------------------------------");
+        console.log("------------------------------------------------");
         if(data.context.session.BotUserSession.locationInfo) {
             data.metaInfo = {
                 nlMeta : {
@@ -161,7 +161,7 @@ sdk.registerBot({
     },
     on_bot_message: function (requestId, data, callback) {
         console.log("EVENT => on_bot_message", data);
-        console.log("\n\n\n\n\n\n ------------------------------------------------");
+        console.log("------------------------------------------------");
         var visitorId = _.get(data, 'channel.from');
         if (_userMsgData[visitorId]) {
             _userMsgData[visitorId].messages.push("<div style='width: 100%;display: table;'><div style='background-color: #F1F0F0; border-radius: 5px; box-shadow: 0 0 6px #B2B2B2;float: left; margin: 5px 45px 5px 20px;  display: inline-block; padding: 10px 18px; position: relative; vertical-align: top;'><b>" + botName + " : </b>" + data.message + "</div></div>");
